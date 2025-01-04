@@ -1,0 +1,331 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>demo image bg</title>
+
+<style type="text/css">
+		
+	.centerPage{
+		/*margin: auto;*/	
+		text-align: center;
+	}
+	
+	/* TOP */
+	#row-top {
+		background-color: #ddd; 
+		height: 50px; 
+		margin: 10px 0px;
+	}
+	
+	/* applies to any DIVs inside row top DIV: */
+	#row-top div {
+		margin: 5px 0px 0px 0px; 
+		display:inline-block
+	}
+	
+	#title {
+		width:30%; 
+		font-family: arial;
+		/*background-color: #ccc;*/
+		border: 1px #a22 dotted;
+	}
+	
+	#instructions {
+		width:40%; 
+		font-family: arial;
+		/*background-color: #bbb;*/
+		border: 1px #a22 dotted;
+	}
+	
+	
+	
+	/* MIDDLE */
+	#row-middle {
+		background-color: #eee; 
+		height: 300px; 
+		margin: 10px 0;
+	}
+	
+	#row-middle > div {
+		margin:0; 
+		display:inline-block
+	}
+	
+	#container_cards{
+		width:60%;
+		/*border: 5px solid #8f7;*/
+		border: 1px #a22 dotted;
+		text-align: center;
+	}
+	#container_categories{
+		/*position: relative;*/
+		width:10%;
+		/*background-color: #888;*/
+		border: 1px #a22 dotted;
+		text-align: center;
+	}
+	
+/* the cards: */
+	.block {
+		background-image : url('imgs/art1.png'); 
+		background-size: cover; 
+		background-repeat: no-repeat; 
+		
+		height: 50px; 
+		width: 50px; 
+		/*border: 1px solid #000;*/
+		display:inline-block;
+		opacity: 0.7;
+		
+	}
+	
+	.categories{
+		height: 50px; 
+		width: 50px;
+		/*border: 1px solid #000;*/
+		background-size: cover;
+		background-repeat: no-repeat;
+		display: block;
+		opacity: 0.7;
+	}
+	
+	#cat1Button{
+		background-image : url('imgs/category1.png');  
+	}
+	#cat2Button{
+		background-image : url('imgs/category2.png');  
+	}
+	#cat3Button{
+		background-image : url('imgs/category3.png');  
+	}
+	#cat4Button{
+		background-image : url('imgs/category4.png');  
+	}
+	
+	
+	/* BOTTOM */
+	#row-bottom {
+		background-color: #e0e0e0; 
+		height: 100px; 
+		margin: 10px 0;
+	}
+	
+	/* apply only to direct descendant DIVs inside row bottom DIV: */
+	#row-bottom > div {
+		margin:0; 
+		display:inline-block
+		
+	}
+	
+	#container_Time{
+		width:25%;
+		font-family: arial;
+		border: 1px #a22 dotted;
+		text-align: center;
+		vertical-align: top;
+	}
+	#container_AddCard{
+		width:25%;
+		/*background-color: #888;*/
+		border: 1px #a22 dotted;
+		text-align: center;
+		vertical-align: top;
+	}
+	#container_Scoring{
+		width:20%;
+		font-family: arial;
+		border: 1px #a22 dotted;
+		text-align: center;
+		vertical-align: top;
+	}
+	
+	.cardChange{
+		height: 50px; 
+		width: 50px;
+		
+		background-repeat: no-repeat;
+		background-size: cover; 
+		/*border: 1px solid #111;*/
+		display:inline-block
+	}
+	
+	#AddCard{
+		background-image : url('imgs/button_AddCard.png'); 
+		opacity: 0.8;
+	}
+	#ClearCards{
+		background-image : url('imgs/button_ClearBoard.png'); 
+		opacity: 0.8;
+	}
+	
+/*  Buttons: hover effect */
+	.block:hover,
+	#cat1Button:hover,
+	#cat2Button:hover,
+	#cat3Button:hover,
+	#cat4Button:hover,
+	#AddCard:hover,
+	#ClearCards:hover{
+		opacity: 1;
+		cursor: pointer;
+	}	
+	
+	
+	
+</style>
+
+<script>
+//window.onload does things AFTER the HTML has been loaded
+//assign all buttons here!
+window.onload = function() {
+	resizeScreen();
+	console.log('hello world');
+	//document.getElementById('btnChange').onclick = changeBG;
+}
+</script>
+
+</head>
+
+<body>
+
+<div class="centerPage">
+<!-- this height is 1/10 Unit -->
+	<div id='row-top'>
+		<div id='title'>Game Title</div>
+        <div id='instructions'>Explanation text of current game moment<br>can go here.</div>
+	</div>
+
+<!-- Middle height is 6/10 Unit -->
+	<div id='row-middle'>
+    	<div id ="container_cards">
+            <div class='block' id='block1'></div>
+            <div class='block' id='block2'></div>
+            <div class='block' id='block3'></div>
+            <br>
+            <div class='block' id='block4'></div>
+            <div class='block' id='block5'></div>
+            <div class='block' id='block6'></div>
+ 		</div>
+        <div id="container_categories">
+        	<div id="cat1Button" class="categories"></div>
+        	<div id="cat2Button" class="categories"></div>
+        	<div id="cat3Button" class="categories"></div>
+            <div id="cat4Button" class="categories"></div>
+        </div>
+	</div>
+	
+<!-- this height is 2/10 Units -->
+	<div id='row-bottom'>
+    	<div id="container_Time">
+        	<div id="timeExplain">TIME REMAINING</div>
+        	<div id="theTime">0:00</div>
+        </div>
+        <div id="container_AddCard">
+			<!--<button id='btnChange'>Change the boxes</button>-->
+            <div id="AddCard" class="cardChange"></div>
+            <div id="ClearCards" class="cardChange"></div>
+        </div>
+        <div id="container_Scoring">
+        	<div id="scoreExplain">SCORE</div>
+        	<div id="scoreNum">0</div>
+		</div>
+	</div>
+    
+</div>
+   
+<script>
+/*
+function changeBG()
+{
+  //alert('hey')
+  file ='art5.png';
+  document.getElementById('block1').style.backgroundImage= "url(" + file + ")"
+}
+*/
+
+function resizeScreen(){
+
+	ht = window.innerHeight;
+	wd = window.innerWidth;
+
+	//if ht > wd, we have vertcal orientation! 
+	//put categories first, so we can set it to a row above cards?: 
+	//set row-middle divs to block, categories to inline-block
+	
+	//alert(ht + ', ' + wd)
+	if (ht < 350) console.log('screen is not tall enough!')
+	//else if (wd < 915) alert('screen is not wide enough!')
+	else{
+	
+		//alert(ht)
+		if (ht > (wd * 0.65)){
+			ht = (wd * 0.65)
+		}
+		//alert(ht)
+		
+		unit = parseInt(ht/10);
+		topHt = unit;
+		middleHt = unit*6.4;
+		bottomHt = unit*2.6;
+		//parseInt truncates to an integer: 3.6=3, 3.2=3. Math.round would be different.
+		
+		//rows resize
+		document.getElementById('row-top').style.height = topHt+'px';
+		document.getElementById('row-top').style.width = wd+'px';
+		
+		document.getElementById('row-middle').style.height = middleHt +'px';
+		document.getElementById('row-middle').style.width = wd +'px';
+		
+		document.getElementById('row-bottom').style.height = bottomHt +'px';
+		document.getElementById('row-bottom').style.width = wd +'px';
+		
+		//contents risize: TOP ROW:
+		document.getElementById('row-top').style.paddingTop = parseInt(unit/50) + 'px';
+		document.getElementById('title').style.fontSize = parseInt(unit/1.5) + 'px';
+		document.getElementById('instructions').style.fontSize = parseInt(unit/3.5) + 'px';
+		
+		//contents resize: MIDDLE ROW
+		boxHt = parseInt(middleHt/2 -10)
+		//alert(boxHt)
+		blocks = document.querySelectorAll('.block')
+		for (i=0; i < blocks.length; i++){
+			blocks[i].style.height = boxHt+'px';
+			blocks[i].style.width = boxHt+'px';
+		}
+		document.getElementById('container_cards').style.height = middleHt;
+		
+		
+		catHt = parseInt(middleHt/4 -5)
+		//alert(boxHt)
+		cats = document.querySelectorAll('.categories')
+		for (c=0; c < cats.length; c++){
+			cats[c].style.height = catHt+'px';
+			cats[c].style.width = catHt+'px';
+		}
+		document.getElementById('container_categories').style.height = middleHt;
+		
+		//contents: resize BOTTOM ROW:
+		document.getElementById('row-bottom').style.paddingTop = parseInt(unit/6) + 'px';
+		document.getElementById('timeExplain').style.fontSize = parseInt(bottomHt/8) + 'px';
+		document.getElementById('theTime').style.fontSize = parseInt((bottomHt/6)*2) + 'px';
+		document.getElementById('scoreExplain').style.fontSize = parseInt(bottomHt/8) + 'px';
+		document.getElementById('scoreNum').style.fontSize = parseInt(bottomHt/3) + 'px';
+	
+		changeHt = parseInt(bottomHt/2)
+		document.getElementById('AddCard').style.height = changeHt+'px';
+		document.getElementById('AddCard').style.width = changeHt+'px';
+		document.getElementById('ClearCards').style.height = changeHt+'px';
+		document.getElementById('ClearCards').style.width = changeHt+'px';
+	
+	}
+	//blocks = document.querySelectorAll('.block')
+	//for (i=0; i<blocks.length; i++)
+	//	blocks[i].onclick = changeBG();
+}
+	
+</script>
+   
+   
+</body>
+</html>

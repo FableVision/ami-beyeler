@@ -1,0 +1,386 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>AMI - Fondation Beyeler - Fast Art Game</title>
+
+<style>
+.gameBackground{
+	top: 0px;
+	left: 0px;
+	width: 100%;
+    height: 100vh;
+	min-height: 1000px;
+    background: #aaa;
+/*	background-size: cover; */
+}
+
+#gameTitle{
+	position: absolute;
+	top: 50px;
+	left: 50px;
+	width: 250px;
+	font: 50px arial;
+	color: #222;
+}
+
+#gameStatusText{
+	position: absolute;
+	top: 50px;
+	right: 50px;
+	width: 650px;
+	font: 24px arial;
+	color: #222;
+}
+
+#gameTimeText{
+	position: absolute;
+	bottom: 200px;
+	left: 50px;
+	width: 400px;
+	font: 30px arial;
+	color: #222;
+}
+
+#gameTimer{
+	position: absolute;
+	bottom: 150px;
+	left: 120px;
+	/*transform: translate(-50%);*/
+	width: 300px;
+	font: 50px arial;
+	color: #222;
+}
+
+#settingsForm{
+	position: absolute;
+	bottom: 50px;
+	left: 50px;
+	
+	font: 30px arial;
+	color: #fff;
+	text-align: center; 
+	opacity: 0.8;
+	visibility: visible;
+}
+
+.categories{
+	position: absolute;
+	right: 50px;
+	width: 200px;
+	height: 200px;
+	/*background: #333;*/
+}
+
+	#buttonCategory1{
+		top: 150px;
+		opacity: 0.75;
+		background-image: url("imgs/category1.png");
+		background-repeat: no-repeat;
+	}	
+	
+	#buttonCategory2{
+		top: calc(150px + 150px + 20px);
+		opacity: 0.75;
+	}
+
+	#buttonCategory3{
+		top: calc(150px + +150px + 20px + 150px + 20px);
+		opacity: 0.75;
+	}
+	
+	#buttonCategory4{
+		top: calc(150px + 150px + 20px + 150px + 20px + 150px + 20px);
+		opacity: 0.75;
+	}
+	
+#button_AddCard{
+	position: absolute;
+	bottom: 50px;
+	left: 430px;
+	opacity: 0.75;
+}
+
+#button_ClearBoard{
+	position: absolute;
+	bottom: 50px;
+	left: 650px;
+	opacity: 0.75;
+}
+
+/*  Buttons: hover effect */
+	#buttonCategory1:hover,
+	#buttonCategory2:hover,
+	#buttonCategory3:hover,
+	#buttonCategory4:hover,
+	#button_AddCard:hover,
+	#button_ClearBoard:hover{
+		opacity: 1;
+		cursor: pointer;
+	}
+
+#rewardScore_text{
+	position: absolute;
+	bottom: 80px;
+	right: 400px;
+	margin-top: 660px;
+	
+	font: 120px arial;
+	color: #555;
+	z-index: 99999;
+}
+
+.rewardScoreCards{
+	position: absolute;
+	bottom: 50px;
+	opacity: 1;
+}
+
+#rewardScoreCard1{right: 320px;}
+#rewardScoreCard2{right: 290px;}
+#rewardScoreCard3{right: 260px;}
+#rewardScoreCard4{right: 230px;}
+#rewardScoreCard5{right: 200px;}
+#rewardScoreCard6{right: 170px;}
+#rewardScoreCard7{right: 140px;}
+#rewardScoreCard8{right: 110px;}
+#rewardScoreCard9{right: 80px;}
+#rewardScoreCard10{right: 50px;}
+
+.scrollable {
+	position: absolute;
+	top: 150px;
+	left:50px;
+	/*margin: auto;*/
+	height: 650px;
+	width: 1000px;
+  	border: 3px solid green;
+  	padding: 5px;
+	
+	background-color: #eee;
+/*	overflow: scroll;*/
+	overflow: auto;
+	text-align: center;
+}
+
+.ArtCards{
+	position: relative;
+	
+	width: 520px;
+	height: 520px;
+	background: #eee;
+		
+	margin: 5px;
+	
+	/*
+	box-shadow: 1px 1px 1px rgba(0,0,0,.3);
+	*/
+  
+	transform: scale(1);
+	transform-style: preserve-3d;
+	transition: transform .5s;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div id="container_MainGame" class="gameBackground">
+
+
+<div id="gameTitle">
+Game Title
+</div>
+
+
+
+<div id="gameStatusText">
+	<span lang="en"> Select 3 art cards, then click a category on the right to check your guess. </span>
+	<span lang="ge"> Wählen Sie 3 Kunstkarten aus und klicken Sie dann rechts auf eine Kategorie, um Ihre Vermutung zu überprüfen. </span>
+</div>
+
+
+<div id="gameTimeText">
+	<span lang="en"> TIME REMAINING: </span>
+	<span lang="ge"> VERBLEIBENDE ZEIT: </span>
+</div>
+
+<a id="gameTimer">00:00</a>
+
+<!-- category buttons -->
+<div id="buttonCategory1" class="categories"></div>
+<div id="buttonCategory2" class="categories"><img src="imgs/category2.png"></div>
+<div id="buttonCategory3" class="categories"><img src="imgs/category3.png"></div>
+<div id="buttonCategory4" class="categories"><img src="imgs/category4.png"></div>
+
+<div id="button_AddCard"><img src="imgs/button_AddCard.png"></div>
+<div id="button_ClearBoard"><img src="imgs/button_ClearBoard.png"></div>
+
+<!-- Reward Cards -->
+<div id="rewardScore_text">0</div>
+<div id="rewardScoreCard10" class="rewardScoreCards"><img src="imgs/rewardScoreCard.png"></div>
+<div id="rewardScoreCard9" class="rewardScoreCards"><img src="imgs/rewardScoreCard.png"></div>
+<div id="rewardScoreCard8" class="rewardScoreCards"><img src="imgs/rewardScoreCard.png"></div>
+<div id="rewardScoreCard7" class="rewardScoreCards"><img src="imgs/rewardScoreCard.png"></div>
+<div id="rewardScoreCard6" class="rewardScoreCards"><img src="imgs/rewardScoreCard.png"></div>
+<div id="rewardScoreCard5" class="rewardScoreCards"><img src="imgs/rewardScoreCard.png"></div>
+<div id="rewardScoreCard4" class="rewardScoreCards"><img src="imgs/rewardScoreCard.png"></div>
+<div id="rewardScoreCard3" class="rewardScoreCards"><img src="imgs/rewardScoreCard.png"></div>
+<div id="rewardScoreCard2" class="rewardScoreCards"><img src="imgs/rewardScoreCard.png"></div>
+<div id="rewardScoreCard1" class="rewardScoreCards"><img src="imgs/rewardScoreCard.png"></div>
+
+
+<!-- cards -->
+<div id="cardsBlock" class="scrollable">
+
+	<a id="ArtCard1_button" class="ArtCards"><img id="ArtCard1" src="imgs/art1.png"></a>
+    <a id="ArtCard2_button" class="ArtCards"><img id="ArtCard2" src="imgs/art2.png"></a>
+    <a id="ArtCard3_button" class="ArtCards"><img id="ArtCard3" src="imgs/art3.png"></a>
+    <a id="ArtCard4_button" class="ArtCards"><img id="ArtCard4" src="imgs/art4.png"></a>
+    <a id="ArtCard5_button" class="ArtCards"><img id="ArtCard5" src="imgs/art5.png"></a>
+    <a id="ArtCard6_button" class="ArtCards"><img id="ArtCard6" src="imgs/art6.png"></a>
+    <a id="ArtCard7_button" class="ArtCards"><img id="ArtCard7" src="imgs/art7.png"></a>
+    <a id="ArtCard8_button" class="ArtCards"><img id="ArtCard8" src="imgs/art8.png"></a>
+    <a id="ArtCard9_button" class="ArtCards"><img id="ArtCard9" src="imgs/art9.png"></a>
+    <a id="ArtCard10_button" class="ArtCards"><img id="ArtCard10" src="imgs/art10.png"></a>
+    <a id="ArtCard11_button" class="ArtCards"><img id="ArtCard11" src="imgs/art11.png"></a>
+    <a id="ArtCard12_button" class="ArtCards"><img id="ArtCard12" src="imgs/art12.png"></a>
+    <a id="ArtCard13_button" class="ArtCards"><img id="ArtCard13" src="imgs/art13.png"></a>
+    <a id="ArtCard14_button" class="ArtCards"><img id="ArtCard14" src="imgs/art14.png"></a>
+    <a id="ArtCard15_button" class="ArtCards"><img id="ArtCard15" src="imgs/art15.png"></a>
+    <a id="ArtCard16_button" class="ArtCards"><img id="ArtCard16" src="imgs/art16.png"></a>
+    <a id="ArtCard17_button" class="ArtCards"><img id="ArtCard17" src="imgs/art17.png"></a>
+    <a id="ArtCard18_button" class="ArtCards"><img id="ArtCard18" src="imgs/art18.png"></a>
+    
+	<a id="ArtCard19_button" class="ArtCards"><img id="ArtCard19" src="imgs/art19.png"></a>
+    <a id="ArtCard20_button" class="ArtCards"><img id="ArtCard20" src="imgs/art20.png"></a>
+    <a id="ArtCard21_button" class="ArtCards"><img id="ArtCard21" src="imgs/art21.png"></a>
+    <a id="ArtCard22_button" class="ArtCards"><img id="ArtCard22" src="imgs/art22.png"></a>
+    <a id="ArtCard23_button" class="ArtCards"><img id="ArtCard23" src="imgs/art23.png"></a>
+    <a id="ArtCard24_button" class="ArtCards"><img id="ArtCard24" src="imgs/art24.png"></a>
+    <a id="ArtCard25_button" class="ArtCards"><img id="ArtCard25" src="imgs/art25.png"></a>
+    <a id="ArtCard26_button" class="ArtCards"><img id="ArtCard26" src="imgs/art26.png"></a>
+    <a id="ArtCard27_button" class="ArtCards"><img id="ArtCard27" src="imgs/art27.png"></a>
+    <a id="ArtCard28_button" class="ArtCards"><img id="ArtCard28" src="imgs/art28.png"></a>
+    <a id="ArtCard29_button" class="ArtCards"><img id="ArtCard29" src="imgs/art29.png"></a>
+    <a id="ArtCard30_button" class="ArtCards"><img id="ArtCard30" src="imgs/art30.png"></a>
+    <a id="ArtCard31_button" class="ArtCards"><img id="ArtCard31" src="imgs/art31.png"></a>
+    <a id="ArtCard32_button" class="ArtCards"><img id="ArtCard32" src="imgs/art32.png"></a>
+    <a id="ArtCard33_button" class="ArtCards"><img id="ArtCard33" src="imgs/art33.png"></a>
+    <a id="ArtCard34_button" class="ArtCards"><img id="ArtCard34" src="imgs/art34.png"></a>
+    <a id="ArtCard35_button" class="ArtCards"><img id="ArtCard35" src="imgs/art35.png"></a>
+    <a id="ArtCard36_button" class="ArtCards"><img id="ArtCard36" src="imgs/art36.png"></a>
+    
+    <a id="ArtCard37_button" class="ArtCards"><img id="ArtCard37" src="imgs/art37.png"></a>
+    <a id="ArtCard38_button" class="ArtCards"><img id="ArtCard38" src="imgs/art38.png"></a>
+    <a id="ArtCard39_button" class="ArtCards"><img id="ArtCard39" src="imgs/art39.png"></a>
+    <a id="ArtCard40_button" class="ArtCards"><img id="ArtCard40" src="imgs/art40.png"></a>
+    <a id="ArtCard41_button" class="ArtCards"><img id="ArtCard41" src="imgs/art41.png"></a>
+    <a id="ArtCard42_button" class="ArtCards"><img id="ArtCard42" src="imgs/art42.png"></a>
+    <a id="ArtCard43_button" class="ArtCards"><img id="ArtCard43" src="imgs/art43.png"></a>
+    <a id="ArtCard44_button" class="ArtCards"><img id="ArtCard44" src="imgs/art44.png"></a>
+    <a id="ArtCard45_button" class="ArtCards"><img id="ArtCard45" src="imgs/art45.png"></a>
+	<a id="ArtCard46_button" class="ArtCards"><img id="ArtCard46" src="imgs/art46.png"></a>
+    <a id="ArtCard47_button" class="ArtCards"><img id="ArtCard47" src="imgs/art47.png"></a>
+    <a id="ArtCard48_button" class="ArtCards"><img id="ArtCard48" src="imgs/art48.png"></a>
+    <a id="ArtCard49_button" class="ArtCards"><img id="ArtCard49" src="imgs/art49.png"></a>
+    <a id="ArtCard50_button" class="ArtCards"><img id="ArtCard50" src="imgs/art50.png"></a>
+    <a id="ArtCard51_button" class="ArtCards"><img id="ArtCard51" src="imgs/art51.png"></a>
+    <a id="ArtCard52_button" class="ArtCards"><img id="ArtCard52" src="imgs/art52.png"></a>
+    <a id="ArtCard53_button" class="ArtCards"><img id="ArtCard53" src="imgs/art53.png"></a>
+    <a id="ArtCard54_button" class="ArtCards"><img id="ArtCard54" src="imgs/art54.png"></a>
+    <a id="ArtCard55_button" class="ArtCards"><img id="ArtCard55" src="imgs/art55.png"></a>
+    <a id="ArtCard56_button" class="ArtCards"><img id="ArtCard56" src="imgs/art56.png"></a>
+    <a id="ArtCard57_button" class="ArtCards"><img id="ArtCard57" src="imgs/art57.png"></a>
+    <a id="ArtCard58_button" class="ArtCards"><img id="ArtCard58" src="imgs/art58.png"></a>
+    <a id="ArtCard59_button" class="ArtCards"><img id="ArtCard59" src="imgs/art59.png"></a>
+    <a id="ArtCard60_button" class="ArtCards"><img id="ArtCard60" src="imgs/art60.png"></a>
+    
+<!-- art_clear.png -->
+</div>
+
+<form id="settingsForm">
+        <label for="lang-switch">
+            <span lang="en">Language: </span>
+            <span lang="ge">Sprache: </span>
+        </label>
+        <select id="lang-switch"  style="font-size:30px;">
+            <option value="en">English</option>
+            <option value="ge" selected>Deutsch</option>
+        </select>
+</form>
+<!-- div to end the main game container: -->
+</div>
+
+<script>
+
+var playerFoundSets = 0;
+var currentCategoryName = "unspecified";
+
+
+//COUNTDOWN TIMER:
+var gameTimer = document.getElementById("gameTimer");
+
+function countdown(minutes) {
+    var seconds = 60;
+    var mins = minutes
+    function tick() {
+        //update gameCounter
+        var current_minutes = mins-1
+        seconds--;
+        gameTimer.innerHTML = current_minutes.toString() + ":" + (seconds < 10 ? "0" : "") + String(seconds);
+        if( seconds > 0 ) {
+            setTimeout(tick, 1000);
+        } else {
+            if(mins > 1){
+                countdown(mins-1);           
+            }
+        }
+    }
+    tick();
+}
+
+// this call starts the counter. put this on the previous screen, and as a replay button
+countdown(2);
+
+</script>
+
+<!-- language swap -->
+<script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+<script>
+$('[lang]').hide(); // hide all lang attributes on start.
+$('[lang="ge"]').show(); // show just english text (you can change it)
+$('#lang-switch').change(function () { // put onchange event when user select option from select
+    var lang = $(this).val(); // decide which language to display using switch case. 
+    switch (lang) {
+        case 'en':
+            $('[lang]').hide();
+            $('[lang="en"]').show();
+        break;
+        case 'ge':
+            $('[lang]').hide();
+            $('[lang="ge"]').show();
+        break;
+        default:
+            $('[lang]').hide();
+            $('[lang="ge"]').show();
+        }
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function () {
+    $('#splashscreen').css('opacity', '1'); // doing this with jQuery for ease
+
+    // here are the basics, just like your existing code
+    $("#splashscreen").click(function () {
+        $("#splashscreen").fadeOut("slow"); // you could also use $(this).fadeOut('slow');
+    });
+});
+</script>
+
+</body>
+</html>

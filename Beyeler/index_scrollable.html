@@ -1,0 +1,789 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>AMI - Fondation Beyeler - Fast Art Game</title>
+
+<style>
+.gameBackground{
+	top: 0px;
+	left: 0px;
+	width: 100%;
+    height: 100vh;
+	min-height: 1000px;
+    background: #aaa;
+/*	background-size: cover; */
+}
+
+#gameTitle{
+	position: absolute;
+	top: 50px;
+	left: 50px;
+	width: 250px;
+	font: 50px arial;
+	color: #222;
+}
+
+#gameStatusText{
+	position: absolute;
+	top: 50px;
+	right: 50px;
+	width: 650px;
+	font: 24px arial;
+	color: #222;
+}
+
+#bottomBar{
+	position: absolute;
+	bottom: 0px;
+}
+
+	#gameTimeText{
+		position: absolute;
+		bottom: 200px;
+		left: 50px;
+		width: 400px;
+		font: 30px arial;
+		color: #222;
+	}
+	
+	#gameTimer{
+		position: absolute;
+		bottom: 150px;
+		left: 120px;
+		/*transform: translate(-50%);*/
+		width: 300px;
+		font: 50px arial;
+		color: #222;
+	}
+	
+	#settingsForm{
+		position: absolute;
+		bottom: 50px;
+		left: 50px;
+		
+		font: 30px arial;
+		color: #fff;
+		text-align: center; 
+		opacity: 0.8;
+		visibility: visible;
+	}
+
+.categories{
+	position: absolute;
+	right: 50px;
+	width: 120px;
+	height: 120px;
+	/*background: #333;*/
+}
+
+	#buttonCategory1{
+		top: 150px;
+		opacity: 0.75;
+		background-image: url("imgs/category1.png");
+		background-repeat: no-repeat;
+	}	
+	
+	#buttonCategory2{
+		top: calc(150px + 120px + 20px);
+		opacity: 0.75;
+		background-image: url("imgs/category2.png");
+		background-repeat: no-repeat;
+	}
+
+	#buttonCategory3{
+		top: calc(150px + +120px + 20px + 120px + 20px);
+		opacity: 0.75;
+		background-image: url("imgs/category3.png");
+		background-repeat: no-repeat;
+	}
+	
+	#buttonCategory4{
+		top: calc(150px + 120px + 20px + 120px + 20px + 120px + 20px);
+		opacity: 0.75;
+		background-image: url("imgs/category4.png");
+		background-repeat: no-repeat;
+	}
+	
+#button_AddCard{
+	position: absolute;
+	bottom: 50px;
+	left: 400px;
+	/* background-image: url("imgs/button_AddCard.png"); */
+	background-repeat: no-repeat;
+	opacity: 0.75;
+}
+
+#button_ClearBoard{
+	position: absolute;
+	bottom: 50px;
+	left: 550px;
+	/* background-image: url("imgs/button_ClearBoard.png"); */
+	background-repeat: no-repeat;
+	opacity: 0.75;
+}
+
+/*  Buttons: hover effect */
+	#buttonCategory1:hover,
+	#buttonCategory2:hover,
+	#buttonCategory3:hover,
+	#buttonCategory4:hover,
+	#button_AddCard:hover,
+	#button_ClearBoard:hover{
+		opacity: 1;
+		cursor: pointer;
+	}
+
+#rewardScore_text{
+	position: absolute;
+	bottom: 80px;
+	right: 300px;
+	
+	font: 120px arial;
+	color: #555;
+	z-index: 99999;
+}
+
+.rewardScoreCards{
+	position: absolute;
+	bottom: 50px;
+	opacity: 1;
+}
+
+#rewardScoreCard1{right: 230px;}
+#rewardScoreCard2{right: 210px;}
+#rewardScoreCard3{right: 190px;}
+#rewardScoreCard4{right: 170px;}
+#rewardScoreCard5{right: 150px;}
+#rewardScoreCard6{right: 130px;}
+#rewardScoreCard7{right: 110px;}
+#rewardScoreCard8{right: 90px;}
+#rewardScoreCard9{right: 70px;}
+#rewardScoreCard10{right: 50px;}
+
+.scrollable {
+	position: absolute;
+	top: 150px;
+	left:50px;
+	/*margin: auto;*/
+	height: 50%;
+	max-height: 650px;
+	width: 840px;
+  	border: 3px solid green;
+  	padding: 5px;
+	
+	background-color: #eee;
+/*	overflow: scroll;*/
+	overflow: auto;
+	text-align: center;
+}
+
+.ArtCards{
+	position: relative;
+	display: inline-block;
+	
+	width: 250px;
+	height: 250px;
+	/*background: #eee;*/
+	background-image: url("imgs/art1.png"); 
+	background-repeat: no-repeat;
+	opacity: 0.7;
+		
+	margin: 5px;
+	
+	/*
+	box-shadow: 1px 1px 1px rgba(0,0,0,.3);
+	*/
+  
+	transform: scale(1);
+	transform-style: preserve-3d;
+	transition: transform .5s;
+}
+
+#ArtCard1_button{
+	background: url("imgs/art5.png"); 
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div id="container_MainGame" class="gameBackground">
+
+<div id="gameTitle">
+Game Title
+</div>
+
+<div id="gameStatusText">
+	<span lang="en"> Select 3 art cards, then click a category on the right to check your guess. </span>
+	<span lang="ge"> Wählen Sie 3 Kunstkarten aus und klicken Sie dann rechts auf eine Kategorie, um Ihre Vermutung zu überprüfen. </span>
+</div>
+
+<!-- category buttons -->
+    <div id="buttonCategory1" class="categories"></div>
+    <div id="buttonCategory2" class="categories"></div>
+    <div id="buttonCategory3" class="categories"></div>
+    <div id="buttonCategory4" class="categories"></div>
+
+<!-- botom content -->
+<div id="bottomBar">
+
+    <div id="gameTimeText">
+        <span lang="en"> TIME REMAINING: </span>
+        <span lang="ge"> VERBLEIBENDE ZEIT: </span>
+    </div>
+    
+    <span id="gameTimer">00:00</span>
+    
+    <form id="settingsForm">
+        <label for="lang-switch">
+            <span lang="en">Language: </span>
+            <span lang="ge">Sprache: </span>
+        </label>
+        <select id="lang-switch"  style="font-size:30px;">
+            <option value="en">English</option>
+            <option value="ge" selected>Deutsch</option>
+        </select>
+	</form>
+    
+    <div id="button_AddCard"><img src="imgs/button_AddCard.png"></div>
+    <div id="button_ClearBoard"><img src="imgs/button_ClearBoard.png"></div>
+
+
+</div>
+
+    <!-- Reward Cards -->
+    <div id="rewardScore_text">0</div>
+    <div id="rewardScoreCard10" class="rewardScoreCards"><img src="imgs/rewardScoreCard.png"></div>
+    <div id="rewardScoreCard9" class="rewardScoreCards"><img src="imgs/rewardScoreCard.png"></div>
+    <div id="rewardScoreCard8" class="rewardScoreCards"><img src="imgs/rewardScoreCard.png"></div>
+    <div id="rewardScoreCard7" class="rewardScoreCards"><img src="imgs/rewardScoreCard.png"></div>
+    <div id="rewardScoreCard6" class="rewardScoreCards"><img src="imgs/rewardScoreCard.png"></div>
+    <div id="rewardScoreCard5" class="rewardScoreCards"><img src="imgs/rewardScoreCard.png"></div>
+    <div id="rewardScoreCard4" class="rewardScoreCards"><img src="imgs/rewardScoreCard.png"></div>
+    <div id="rewardScoreCard3" class="rewardScoreCards"><img src="imgs/rewardScoreCard.png"></div>
+    <div id="rewardScoreCard2" class="rewardScoreCards"><img src="imgs/rewardScoreCard.png"></div>
+    <div id="rewardScoreCard1" class="rewardScoreCards"><img src="imgs/rewardScoreCard.png"></div>
+
+<!-- cards -->
+<div id="cardsBlock" class="scrollable">
+
+	<div id="ArtCard1_button" class="ArtCards"></div>
+    <div id="ArtCard2_button" class="ArtCards"></div>
+    <div id="ArtCard3_button" class="ArtCards"></div>
+    <div id="ArtCard4_button" class="ArtCards"></div>
+    <div id="ArtCard5_button" class="ArtCards"></div>
+    <div id="ArtCard6_button" class="ArtCards"></div>
+
+    <div id="ArtCard7_button" class="ArtCards"></div>
+    <div id="ArtCard8_button" class="ArtCards"></div>
+    <div id="ArtCard9_button" class="ArtCards"></div>
+    <div id="ArtCard10_button" class="ArtCards"></div>
+    <div id="ArtCard11_button" class="ArtCards"></div>
+    <div id="ArtCard12_button" class="ArtCards"></div>
+    <div id="ArtCard13_button" class="ArtCards"></div>
+    <div id="ArtCard14_button" class="ArtCards"></div>
+    <div id="ArtCard15_button" class="ArtCards"></div>
+    <div id="ArtCard16_button" class="ArtCards"></div>
+    <div id="ArtCard17_button" class="ArtCards"></div>
+    <div id="ArtCard18_button" class="ArtCards"></div>
+
+	<div id="ArtCard19_button" class="ArtCards"></div>
+    <div id="ArtCard20_button" class="ArtCards"></div>
+    <div id="ArtCard21_button" class="ArtCards"></div>
+    <div id="ArtCard22_button" class="ArtCards"></div>
+    <div id="ArtCard23_button" class="ArtCards"></div>
+    <div id="ArtCard24_button" class="ArtCards"></div>
+    <div id="ArtCard25_button" class="ArtCards"></div>
+    <div id="ArtCard26_button" class="ArtCards"></div>
+    <div id="ArtCard27_button" class="ArtCards"></div>
+    <div id="ArtCard28_button" class="ArtCards"></div>
+    <div id="ArtCard29_button" class="ArtCards"></div>
+    <div id="ArtCard30_button" class="ArtCards"></div>
+    <div id="ArtCard31_button" class="ArtCards"></div>
+    <div id="ArtCard32_button" class="ArtCards"></div>
+    <div id="ArtCard33_button" class="ArtCards"></div>
+    <div id="ArtCard34_button" class="ArtCards"></div>
+    <div id="ArtCard35_button" class="ArtCards"></div>
+    <div id="ArtCard36_button" class="ArtCards"></div>
+    
+    <div id="ArtCard37_button" class="ArtCards"></div>
+    <div id="ArtCard38_button" class="ArtCards"></div>
+    <div id="ArtCard39_button" class="ArtCards"></div>
+    <div id="ArtCard40_button" class="ArtCards"></div>
+    <div id="ArtCard41_button" class="ArtCards"></div>
+    <div id="ArtCard42_button" class="ArtCards"></div>
+    <div id="ArtCard43_button" class="ArtCards"></div>
+
+	<!-- art_clear.png -->
+</div>
+
+<!-- div to end the main game container: -->
+</div>
+
+<script>
+
+//art cards
+var ArtCard1_button = document.getElementById("ArtCard1_button"); 
+var ArtCard2_button = document.getElementById("ArtCard2_button"); 
+var ArtCard3_button = document.getElementById("ArtCard3_button"); 
+var ArtCard4_button = document.getElementById("ArtCard4_button"); 
+var ArtCard5_button = document.getElementById("ArtCard5_button"); 
+var ArtCard6_button = document.getElementById("ArtCard6_button"); 
+
+var ArtCard7_button = document.getElementById("ArtCard7_button"); 
+var ArtCard8_button = document.getElementById("ArtCard8_button"); 
+var ArtCard9_button = document.getElementById("ArtCard9_button"); 
+var ArtCard10_button = document.getElementById("ArtCard10_button"); 
+var ArtCard11_button = document.getElementById("ArtCard11_button"); 
+var ArtCard12_button = document.getElementById("ArtCard12_button"); 
+var ArtCard13_button = document.getElementById("ArtCard13_button"); 
+var ArtCard14_button = document.getElementById("ArtCard14_button"); 
+var ArtCard15_button = document.getElementById("ArtCard15_button"); 
+var ArtCard16_button = document.getElementById("ArtCard16_button"); 
+var ArtCard17_button = document.getElementById("ArtCard17_button"); 
+var ArtCard18_button = document.getElementById("ArtCard18_button");
+ 
+var ArtCard19_button = document.getElementById("ArtCard19_button"); 
+var ArtCard20_button = document.getElementById("ArtCard20_button");
+var ArtCard21_button = document.getElementById("ArtCard21_button"); 
+var ArtCard22_button = document.getElementById("ArtCard22_button"); 
+var ArtCard23_button = document.getElementById("ArtCard23_button"); 
+var ArtCard24_button = document.getElementById("ArtCard24_button"); 
+var ArtCard25_button = document.getElementById("ArtCard25_button"); 
+var ArtCard26_button = document.getElementById("ArtCard26_button"); 
+var ArtCard27_button = document.getElementById("ArtCard27_button"); 
+var ArtCard28_button = document.getElementById("ArtCard28_button"); 
+var ArtCard29_button = document.getElementById("ArtCard29_button"); 
+var ArtCard30_button = document.getElementById("ArtCard30_button");
+
+var ArtCard31_button = document.getElementById("ArtCard31_button"); 
+var ArtCard32_button = document.getElementById("ArtCard32_button"); 
+var ArtCard33_button = document.getElementById("ArtCard33_button"); 
+var ArtCard34_button = document.getElementById("ArtCard34_button"); 
+var ArtCard35_button = document.getElementById("ArtCard35_button"); 
+var ArtCard36_button = document.getElementById("ArtCard36_button"); 
+var ArtCard37_button = document.getElementById("ArtCard37_button"); 
+var ArtCard38_button = document.getElementById("ArtCard38_button"); 
+var ArtCard39_button = document.getElementById("ArtCard39_button"); 
+var ArtCard40_button = document.getElementById("ArtCard40_button");
+var ArtCard41_button = document.getElementById("ArtCard41_button"); 
+var ArtCard42_button = document.getElementById("ArtCard42_button"); 
+var ArtCard43_button = document.getElementById("ArtCard43_button");
+
+//buttons:
+var button_AddCard = document.getElementById("button_AddCard");
+var button_ClearBoard = document.getElementById("button_ClearBoard");
+var buttonCategory1 = document.getElementById("buttonCategory1");
+var buttonCategory2 = document.getElementById("buttonCategory2");
+var buttonCategory3 = document.getElementById("buttonCategory3");
+var buttonCategory4 = document.getElementById("buttonCategory4");
+
+
+button_AddCard.addEventListener('click', AddCard);
+
+button_ClearBoard.addEventListener('click', ClearBoard);
+
+buttonCategory1.addEventListener('click', TestCategory1);
+
+buttonCategory2.addEventListener('click', TestCategory2);
+
+buttonCategory3.addEventListener('click', TestCategory3);
+
+buttonCategory4.addEventListener('click', TestCategory4);
+
+
+//Test categories
+var playerFoundSets = 0;
+var currentCategoryName = "unspecified";
+
+//populate with real numbers
+const cat1RightArtArray = [1,2,3,4,5]; // Animals
+const cat2RightArtArray = [15,17,18,19]; // Portraits
+const cat3RightArtArray = [3,7,10,24,29]; // Landscapes
+const cat4RightArtArray = [27,29,33,40]; //StillLife
+
+function TestCategory1(){
+	currentCategoryName = "Animals"
+}
+
+function TestCategory2(){
+	currentCategoryName = "Portraits"
+}
+
+function TestCategory3(){
+	currentCategoryName = "Landscapes"
+}
+
+function TestCategory4(){
+	currentCategoryName = "StillLifes"
+}
+
+//ADD /CLEAR CARDS
+var cardToBeVisible = 0;
+function AddCard(){
+	if (cardURLs[cardToBeVisible] != null){
+		cardURLs[cardToBeVisible].style.display = "inline-block";
+		//cardURLs[cardToBeVisible].style.backgroundImage = "url(artURLs[3].src)"; //does not yet work
+		cardURLs[cardToBeVisible].style.background = artURLs[3].src;
+		//cardURLs[cardToBeVisible].style.background = "#af5";
+		cardToBeVisible++;
+		//console.log("added card: " + cardURLs[cardToBeVisible - 1].id + ", with art: " + artURLs[3].src + ". Next card to be visible: " + (cardToBeVisible+1));
+		console.log("added card: " + cardURLs[cardToBeVisible - 1].id + ", with art: " + cardURLs[cardToBeVisible - 1].style.backgroundImage + ". Next card to be visible: " + (cardToBeVisible+1));
+	} else {
+		console.log("can't add more cards-- reached end of deck: " + cardToBeVisible);
+	}
+}
+
+function ClearBoard(){
+	console.log("I pressed the ClearBoard button");
+	for (cl = 0; cl < cardURLs.length; cl++){
+		//set all cards to empty, and turn off diplays:
+		//cardURLs[cl].style.background-image = artURLs[1].src;
+		//cardURLs[cl].style.backgroundimage = "url(artURLs[cl].src)"; //does not yet work
+		cardURLs[cl].style.display = "none";
+		cardToBeVisible = 0;
+console.log("clear all art cards: " + cardURLs[cl].id + " = " + artURLs[cl].src + ", " + cardURLs[cl].style.backgroundImage + ", " + cl);
+	}
+}
+
+		
+//"ARRAY" of card slots as a NodeList:
+var cardURLs = document.querySelectorAll(".ArtCards");
+
+//ARRAY of images
+var artURLs = [];
+	
+	artURLs[0] = {
+		image00 : new Image(),
+		src : "imgs/art_clear.png",
+		imageCaption : "empty",
+		imageCaptionGerman : "empty in German"
+	};
+	artURLs[1] = {
+		image01 : new Image(),
+		src : "imgs/art1.png",
+		imageCaption : "Art Name 1",
+		imageCaptionGerman : "Art Name 1 in German"
+	};
+	artURLs[2] = {
+		image02 : new Image(),
+		src : "imgs/art2.png",
+		imageCaption : "Art Name 2",
+		imageCaptionGerman : "Art Name 2 in German"
+	};
+
+	artURLs[3] = {
+		image03 : new Image(),
+		src : "imgs/art3.png",
+		imageCaption : "Art Name 3",
+		imageCaptionGerman : "Art Name 3 in German"
+	};
+	artURLs[4] = {
+		image04 : new Image(),
+		src : "imgs/art4.png",
+		imageCaption : "Art Name 4",
+		imageCaptionGerman : "Art Name 4 in German"
+	};
+	artURLs[5] = {
+		image05 : new Image(),
+		src : "imgs/art5.png",
+		imageCaption : "Art Name 5",
+		imageCaptionGerman : "Art Name 5 in German"
+	};
+	artURLs[6] = {
+		image06 : new Image(),
+		src : "imgs/art6.png",
+		imageCaption : "Art Name 6",
+		imageCaptionGerman : "Art Name 6 in German"
+	};
+	artURLs[7] = {
+		image07 : new Image(),
+		src : "imgs/art7.png",
+		imageCaption : "Art Name 7",
+		imageCaptionGerman : "Art Name 7 in German"
+	};
+	artURLs[8] = {
+		image08 : new Image(),
+		src : "imgs/art8.png",
+		imageCaption : "Art Name 8",
+		imageCaptionGerman : "Art Name 8 in German"
+	};
+	artURLs[9] = {
+		image09 : new Image(),
+		src : "imgs/art9.png",
+		imageCaption : "Art Name 9",
+		imageCaptionGerman : "Art Name 9 in German"
+	};
+	artURLs[10] = {
+		image10 : new Image(),
+		src : "imgs/art10.png",
+		imageCaption : "Art Name 10",
+		imageCaptionGerman : "Art Name 10 in German"
+	};
+	artURLs[11] = {
+		image11 : new Image(),
+		src : "imgs/art11.png",
+		imageCaption : "Art Name 11",
+		imageCaptionGerman : "Art Name 11 in German"
+	};
+	artURLs[12] = {
+		image12 : new Image(),
+		src : "imgs/art12.png",
+		imageCaption : "Art Name 12",
+		imageCaptionGerman : "Art Name 12 in German"
+	};
+	artURLs[13] = {
+		image13 : new Image(),
+		src : "imgs/art13.png",
+		imageCaption : "Art Name 13",
+		imageCaptionGerman : "Art Name 13 in German"
+	};
+	artURLs[14] = {
+		image14 : new Image(),
+		src : "imgs/art14.png",
+		imageCaption : "Art Name 14",
+		imageCaptionGerman : "Art Name 14 in German"
+	};	
+	artURLs[15] = {
+		image15 : new Image(),
+		src : "imgs/art15.png",
+		imageCaption : "Art Name 15",
+		imageCaptionGerman : "Art Name 15 in German"
+	};
+	artURLs[16] = {
+		image16 : new Image(),
+		src : "imgs/art16.png",
+		imageCaption : "Art Name 16",
+		imageCaptionGerman : "Art Name 16 in German"
+	};
+	artURLs[17] = {
+		image17 : new Image(),
+		src : "imgs/art17.png",
+		imageCaption : "Art Name 17",
+		imageCaptionGerman : "Art Name 17 in German"
+	};	
+	artURLs[18] = {
+		image18 : new Image(),
+		src : "imgs/art18.png",
+		imageCaption : "Art Name 18",
+		imageCaptionGerman : "Art Name 18 in German"
+	};	
+	artURLs[19] = {
+		image19 : new Image(),
+		src : "imgs/art19.png",
+		imageCaption : "Art Name 19",
+		imageCaptionGerman : "Art Name 19 in German"
+	};	
+	artURLs[20] = {
+		image20 : new Image(),
+		src : "imgs/art20.png",
+		imageCaption : "Art Name 20",
+		imageCaptionGerman : "Art Name 20 in German"
+	};	
+	artURLs[21] = {
+		image21 : new Image(),
+		src : "imgs/art21.png",
+		imageCaption : "Art Name 21",
+		imageCaptionGerman : "Art Name 21 in German"
+	};	
+	artURLs[22] = {
+		image22 : new Image(),
+		src : "imgs/art22.png",
+		imageCaption : "Art Name 22",
+		imageCaptionGerman : "Art Name 22 in German"
+	};	
+	artURLs[23] = {
+		image23 : new Image(),
+		src : "imgs/art23.png",
+		imageCaption : "Art Name 23",
+		imageCaptionGerman : "Art Name 23 in German"
+	};
+	artURLs[24] = {
+		image24 : new Image(),
+		src : "imgs/art24.png",
+		imageCaption : "Art Name 24",
+		imageCaptionGerman : "Art Name 24 in German"
+	};	
+	artURLs[25] = {
+		image25 : new Image(),
+		src : "imgs/art25.png",
+		imageCaption : "Art Name 25",
+		imageCaptionGerman : "Art Name 25 in German"
+	};	
+	artURLs[26] = {
+		image26 : new Image(),
+		src : "imgs/art26.png",
+		imageCaption : "Art Name 26",
+		imageCaptionGerman : "Art Name 26 in German"
+	};	
+	artURLs[27] = {
+		image27 : new Image(),
+		src : "imgs/art27.png",
+		imageCaption : "Art Name 27",
+		imageCaptionGerman : "Art Name 27 in German"
+	};	
+	artURLs[28] = {
+		image28 : new Image(),
+		src : "imgs/art28.png",
+		imageCaption : "Art Name 28",
+		imageCaptionGerman : "Art Name 28 in German"
+	};	
+	artURLs[29] = {
+		image29 : new Image(),
+		src : "imgs/art29.png",
+		imageCaption : "Art Name 29",
+		imageCaptionGerman : "Art Name 29 in German"
+	};	
+	artURLs[30] = {
+		image30 : new Image(),
+		src : "imgs/art30.png",
+		imageCaption : "Art Name 30",
+		imageCaptionGerman : "Art Name 30 in German"
+	};	
+	artURLs[31] = {
+		image31 : new Image(),
+		src : "imgs/art31.png",
+		imageCaption : "Art Name 31",
+		imageCaptionGerman : "Art Name 31 in German"
+	};	
+	artURLs[32] = {
+		image32 : new Image(),
+		src : "imgs/art32.png",
+		imageCaption : "Art Name 32",
+		imageCaptionGerman : "Art Name 32 in German"
+	};	
+	artURLs[33] = {
+		image33 : new Image(),
+		src : "imgs/art33.png",
+		imageCaption : "Art Name 33",
+		imageCaptionGerman : "Art Name 33 in German"
+	};
+	artURLs[34] = {
+		image34 : new Image(),
+		src : "imgs/art34.png",
+		imageCaption : "Art Name 34",
+		imageCaptionGerman : "Art Name 34 in German"
+	};	
+	artURLs[35] = {
+		image35 : new Image(),
+		src : "imgs/art35.png",
+		imageCaption : "Art Name 35",
+		imageCaptionGerman : "Art Name 35 in German"
+	};	
+	artURLs[36] = {
+		image36 : new Image(),
+		src : "imgs/art36.png",
+		imageCaption : "Art Name 36",
+		imageCaptionGerman : "Art Name 36 in German"
+	};
+	artURLs[37] = {
+		image37 : new Image(),
+		src : "imgs/art37.png",
+		imageCaption : "Art Name 37",
+		imageCaptionGerman : "Art Name 37in German"
+	};	
+	artURLs[38] = {
+		image38 : new Image(),
+		src : "imgs/art38.png",
+		imageCaption : "Art Name 38",
+		imageCaptionGerman : "Art Name 38 in German"
+	};
+	artURLs[39] = {
+		image39 : new Image(),
+		src : "imgs/art39.png",
+		imageCaption : "Art Name 39",
+		imageCaptionGerman : "Art Name 39 in German"
+	};	
+	artURLs[40] = {
+		image40 : new Image(),
+		src : "imgs/art40.png",
+		imageCaption : "Art Name 40",
+		imageCaptionGerman : "Art Name 40 in German"
+	};	
+	artURLs[41] = {
+		image41 : new Image(),
+		src : "imgs/art41.png",
+		imageCaption : "Art Name 41",
+		imageCaptionGerman : "Art Name 41 in German"
+	};
+	artURLs[42] = {
+		image42 : new Image(),
+		src : "imgs/art42.png",
+		imageCaption : "Art Name 42",
+		imageCaptionGerman : "Art Name 42 in German"
+	};
+	artURLs[43] = {
+		image43 : new Image(),
+		src : "imgs/art43.png",
+		imageCaption : "Art Name 43",
+		imageCaptionGerman : "Art Name 43 in German"
+	};
+
+
+//COUNTDOWN TIMER:
+var gameTimer = document.getElementById("gameTimer");
+
+function countdown(minutes) {
+    var seconds = 60;
+    var mins = minutes
+    function tick() {
+        //update gameCounter
+        var current_minutes = mins-1
+        seconds--;
+        gameTimer.innerHTML = current_minutes.toString() + ":" + (seconds < 10 ? "0" : "") + String(seconds);
+        if( seconds > 0 ) {
+            setTimeout(tick, 1000);
+        } else {
+            if(mins > 1){
+                countdown(mins-1);           
+            }
+        }
+    }
+    tick();
+}
+
+// this call starts the counter. put this on the previous screen, and as a replay button
+countdown(2);
+
+</script>
+
+<!-- LANGUAGE SWAP -->
+<script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+<script>
+$('[lang]').hide(); // hide all lang attributes on start.
+$('[lang="ge"]').show(); // show just english text (you can change it)
+$('#lang-switch').change(function () { // put onchange event when user select option from select
+    var lang = $(this).val(); // decide which language to display using switch case. 
+    switch (lang) {
+        case 'en':
+            $('[lang]').hide();
+            $('[lang="en"]').show();
+        break;
+        case 'ge':
+            $('[lang]').hide();
+            $('[lang="ge"]').show();
+        break;
+        default:
+            $('[lang]').hide();
+            $('[lang="ge"]').show();
+        }
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function () {
+    $('#splashscreen').css('opacity', '1'); // doing this with jQuery for ease
+
+    // here are the basics, just like your existing code
+    $("#splashscreen").click(function () {
+        $("#splashscreen").fadeOut("slow"); // you could also use $(this).fadeOut('slow');
+    });
+});
+</script>
+
+</body>
+</html>
